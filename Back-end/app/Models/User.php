@@ -48,6 +48,12 @@ class User extends Authenticatable
         ];
     }
 
+    // Check if the user has the given role
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
     public function bookings()
     {
         return $this->hasMany(Booking::class);
