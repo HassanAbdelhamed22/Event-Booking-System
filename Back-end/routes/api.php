@@ -34,3 +34,13 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum');
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/events', [\App\Http\Controllers\AdminEventController::class, 'create']);
+    Route::put('/events/{event}', [\App\Http\Controllers\AdminEventController::class, 'update']);
+    Route::delete('/events/{event}', [\App\Http\Controllers\AdminEventController::class, 'delete']);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->get('/test-role', function () {
+    return 'Role middleware is working!';
+});
