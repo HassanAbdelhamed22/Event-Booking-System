@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\EventController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -37,7 +38,15 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/events', [AdminEventController::class, 'create']);
-    Route::put('/events/{event}', [AdminEventController::class, 'update']);
-    Route::delete('/events/{event}', [AdminEventController::class, 'delete']);
+    Route::post('/admin/events', [AdminEventController::class, 'create']);
+    Route::put('/admin/events/{event}', [AdminEventController::class, 'update']);
+    Route::delete('/admin/events/{event}', [AdminEventController::class, 'delete']);
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{event}', [EventController::class, 'show']);
+    Route::get('/events/search', [EventController::class, 'search']);
+    Route::get('/events/filter/date', [EventController::class, 'filterByDate']);
+    Route::get('/events/filter/location', [EventController::class, 'filterByLocation']);
 });
