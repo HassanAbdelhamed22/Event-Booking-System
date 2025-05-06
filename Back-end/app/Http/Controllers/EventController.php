@@ -12,8 +12,8 @@ class EventController extends Controller
     {
         $events = Event::paginate(10);
         return response()->json([
-            'events' => $events,
-            'meta' => [
+            'events' => $events->items(),
+            'pagination' => [
                 'current_page' => $events->currentPage(),
                 'last_page' => $events->lastPage(),
                 'per_page' => $events->perPage(),
