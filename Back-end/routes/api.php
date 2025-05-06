@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,9 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum');
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::post('/events', [AdminEventController::class, 'create']);
+    Route::put('/events/{event}', [AdminEventController::class, 'update']);
+    Route::delete('/events/{event}', [AdminEventController::class, 'delete']);
+});
