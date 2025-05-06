@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,11 +37,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    Route::post('/events', [\App\Http\Controllers\AdminEventController::class, 'create']);
-    Route::put('/events/{event}', [\App\Http\Controllers\AdminEventController::class, 'update']);
-    Route::delete('/events/{event}', [\App\Http\Controllers\AdminEventController::class, 'delete']);
-});
-
-Route::middleware(['auth:sanctum', 'role:admin'])->get('/test-role', function () {
-    return 'Role middleware is working!';
+    Route::post('/events', [AdminEventController::class, 'create']);
+    Route::put('/events/{event}', [AdminEventController::class, 'update']);
+    Route::delete('/events/{event}', [AdminEventController::class, 'delete']);
 });
