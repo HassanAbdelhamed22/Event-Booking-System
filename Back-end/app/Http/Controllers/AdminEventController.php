@@ -50,4 +50,13 @@ class AdminEventController extends Controller
 
         return response()->json(['message' => 'Event updated successfully', 'event' => $event], 200);
     }
+
+    // Delete an event
+    public function delete($id)
+    {
+        $event = Event::findOrFail($id);
+        $event->delete();
+
+        return response()->json(['message' => 'Event deleted successfully'], 200);
+    }
 }
