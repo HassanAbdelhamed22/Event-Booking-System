@@ -26,12 +26,6 @@ class BookingController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // Check if the event exists
-        $event = Event::find($eventId);
-        if (!$event) {
-            return response()->json(['message' => 'Event not found'], 404);
-        }
-
         // Check if the user has already booked for this event
         $existingBooking = Booking::where('user_id', auth()->id())
             ->where('event_id', $eventId)
@@ -54,5 +48,27 @@ class BookingController extends Controller
         ]);
 
         return response()->json(['message' => 'Booking created successfully', 'booking' => $booking], 201);
+    }
+
+    // Function to get all bookings for a user
+    public function getUserBookings()
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Fetch the bookings for the authenticated user
+        $bookings = Booking::where('user_id', auth()->id())->with('event')->paginate(10);
+
+        return response()->json([
+            'bookings' => $bookings->items(),
+            'pagination' => [
+                'current_page' => $bookings->currentPage(),
+                'last_page' => $bookings->lastPage(),
+                'per_page' => $bookings->perPage(),
+                'total' => $bookings->total(),
+            ],
+        ], 200);
     }
 }
