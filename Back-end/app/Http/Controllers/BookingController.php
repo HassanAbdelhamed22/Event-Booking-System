@@ -71,4 +71,21 @@ class BookingController extends Controller
             ],
         ], 200);
     }
+
+    // Function to delete a booking
+    public function deleteBooking($bookingId)
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Fetch the booking
+        $booking = Booking::where('user_id', auth()->id())->findOrFail($bookingId);
+
+        // Delete the booking
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted successfully'], 200);
+    }
 }
