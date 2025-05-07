@@ -54,4 +54,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/events/{event}/bookings', [BookingController::class, 'createBooking']);
+    Route::get('/user/bookings', [BookingController::class, 'getUserBookings']);
 });
