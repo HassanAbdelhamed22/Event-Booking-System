@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\EventController;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -49,4 +50,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/events/filter/date', [EventController::class, 'filterByDate']);
     Route::get('/events/filter/location', [EventController::class, 'filterByLocation']);
     Route::get('/events/{event}', [EventController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
+    Route::post('/events/{event}/bookings', [BookingController::class, 'createBooking']);
 });
