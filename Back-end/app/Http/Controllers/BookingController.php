@@ -72,6 +72,31 @@ class BookingController extends Controller
         ], 200);
     }
 
+    // Function to update a booking
+    public function updateBooking(Request $request, $bookingId)
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Fetch the booking
+        $booking = Booking::where('user_id', auth()->id())->findOrFail($bookingId);
+
+        // Validate the request data
+        $validatedData = $request->validate([
+            'number_of_tickets' => 'required|integer|min:1',
+        ]);
+
+        // Update the booking
+        $booking->update([
+            'number_of_tickets' => $validatedData['number_of_tickets'],
+            'total_price' => $this->calculateTotalPrice($booking->event_id, $validatedData['number_of_tickets']),
+        ]);
+
+        return response()->json(['message' => 'Booking updated successfully', 'booking' => $booking], 200);
+    }
+
     // Function to delete a booking
     public function deleteBooking($bookingId)
     {
