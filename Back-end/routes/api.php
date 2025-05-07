@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminBookingController;
 use App\Http\Controllers\AdminEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,7 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::post('/admin/events', [AdminEventController::class, 'create']);
     Route::put('/admin/events/{event}', [AdminEventController::class, 'update']);
     Route::delete('/admin/events/{event}', [AdminEventController::class, 'delete']);
+    Route::get('/admin/events/{event}/bookings', [AdminBookingController::class, 'getEventBookings']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
