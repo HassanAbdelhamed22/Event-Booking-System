@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import PageNotFound from "./pages/PageNotFound";
 import HomePage from "./pages/HomePage";
@@ -13,7 +13,6 @@ function App() {
     <div>
       <Toaster position="top-center" />
 
-      <Router>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
@@ -34,7 +33,6 @@ function App() {
           {/* Not Found Page */}
           <Route path="*" element={<PageNotFound />} />
         </Routes>
-      </Router>
     </div>
   );
 }
