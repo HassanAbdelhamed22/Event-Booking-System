@@ -1,7 +1,7 @@
 export interface UserData {
   token: string;
   name: string;
-  role: string;
+  role: "admin" | "user";
 }
 
 export interface User {
@@ -9,7 +9,7 @@ export interface User {
   email: string;
   name: string;
   role: "admin" | "user";
-  createdAt: string;
+  token: string;
 }
 
 export interface AuthContextType {
