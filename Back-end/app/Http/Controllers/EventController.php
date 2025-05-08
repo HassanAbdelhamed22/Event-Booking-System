@@ -29,6 +29,13 @@ class EventController extends Controller
         return response()->json($event, 200);
     }
 
+    // Get Categories
+    public function getCategories()
+    {
+        $categories = Event::select('category', 'image')->distinct()->get();
+        return response()->json($categories, 200);
+    }
+
     // Search events
     public function search(Request $request)
     {
