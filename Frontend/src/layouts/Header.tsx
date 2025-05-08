@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, Menu, X, LogOut, Settings } from 'lucide-react';
-import Button from '../components/UI/Button';
-import { useAuth } from '../context/AuthContext';
-
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Calendar, Menu, X, LogOut, Settings } from "lucide-react";
+import Button from "../components/UI/Button";
+import { useAuth } from "../context/AuthContext";
 
 const Header: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -22,9 +21,9 @@ const Header: React.FC = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error("Error signing out:", error);
     }
   };
 
@@ -35,21 +34,30 @@ const Header: React.FC = () => {
           {/* Logo and brand */}
           <Link to="/" className="flex items-center space-x-2">
             <Calendar className="h-8 w-8 text-primary-600" />
-            <span className="text-xl font-bold text-gray-900">EventHub</span>
+            <span className="text-xl font-bold text-gray-900">Evently</span>
           </Link>
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="font-medium text-gray-600 hover:text-primary-600 transition-colors">
+            <Link
+              to="/"
+              className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+            >
               Home
             </Link>
             {user ? (
               <>
-                <Link to="/bookings" className="font-medium text-gray-600 hover:text-primary-600 transition-colors">
+                <Link
+                  to="/bookings"
+                  className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                >
                   My Bookings
                 </Link>
-                {user.role === 'admin' && (
-                  <Link to="/admin" className="font-medium text-gray-600 hover:text-primary-600 transition-colors">
+                {user.role === "admin" && (
+                  <Link
+                    to="/admin"
+                    className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                  >
                     Admin
                   </Link>
                 )}
@@ -79,16 +87,16 @@ const Header: React.FC = () => {
                     </div>
                     <Link
                       to="/bookings"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                      className=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                       onClick={() => setIsProfileOpen(false)}
                     >
                       <Calendar className="h-4 w-4 mr-2" />
                       My Bookings
                     </Link>
-                    {user.role === 'admin' && (
+                    {user.role === "admin" && (
                       <Link
                         to="/admin"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                        className=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                         onClick={() => setIsProfileOpen(false)}
                       >
                         <Settings className="h-4 w-4 mr-2" />
@@ -97,7 +105,7 @@ const Header: React.FC = () => {
                     )}
                     <button
                       onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                      className=" w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                     >
                       <LogOut className="h-4 w-4 mr-2" />
                       Sign Out
@@ -122,7 +130,11 @@ const Header: React.FC = () => {
             className="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 focus:outline-none"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -147,7 +159,7 @@ const Header: React.FC = () => {
                 >
                   My Bookings
                 </Link>
-                {user.role === 'admin' && (
+                {user.role === "admin" && (
                   <Link
                     to="/admin"
                     className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"

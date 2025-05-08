@@ -41,6 +41,8 @@ interface ButtonProps
   children: ReactNode;
   isLoading?: boolean;
   type?: "submit" | "button" | "reset";
+  icon?: ReactNode;
+  className?: string;
 }
 
 const Button = ({
@@ -51,6 +53,7 @@ const Button = ({
   className,
   children,
   type,
+  icon,
   ...props
 }: ButtonProps) => {
   return (
@@ -82,7 +85,10 @@ const Button = ({
           ></path>
         </svg>
       ) : null}
-      {children}
+      <div className="flex items-center justify-center gap-2">
+        {icon && !isLoading ? icon : null}
+        {children}
+      </div>
     </button>
   );
 };

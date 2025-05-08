@@ -5,7 +5,7 @@ import type { LoginCredentials, RegisterCredentials } from "../types";
 
 export const login = async (credentials: LoginCredentials) => {
   const { data, status } = await axios.post(
-    `${BASE_URL}auth/login`,
+    `${BASE_URL}login`,
     credentials,
     {
       headers: {
@@ -18,7 +18,7 @@ export const login = async (credentials: LoginCredentials) => {
 
 export const register = async (credentials: RegisterCredentials) => {
   const { data, status } = await axios.post(
-    `${BASE_URL}auth/register`,
+    `${BASE_URL}register`,
     credentials,
     {
       headers: {
@@ -30,7 +30,7 @@ export const register = async (credentials: RegisterCredentials) => {
 };
 
 export const signOut = async () => {
-  const { data, status } = await api.post(`${BASE_URL}auth/logout`, null, {
+  const { data, status } = await api.post(`${BASE_URL}logout`, null, {
     headers: {
       "Content-Type": "application/json",
     },
