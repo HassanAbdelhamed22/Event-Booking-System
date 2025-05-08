@@ -46,12 +46,13 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/events/{event}/bookings', [AdminBookingController::class, 'getEventBookings']);
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/events', [EventController::class, 'index']);
+Route::group([], function () {
+    Route::get('/events/categories', [EventController::class, 'getCategories']);
     Route::get('/events/search', [EventController::class, 'search']);
     Route::get('/events/filter/date', [EventController::class, 'filterByDate']);
     Route::get('/events/filter/location', [EventController::class, 'filterByLocation']);
     Route::get('/events/{event}', [EventController::class, 'show']);
+    Route::get('/events', [EventController::class, 'index']);
 });
 
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
