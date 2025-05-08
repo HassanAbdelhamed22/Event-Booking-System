@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useFormik } from "formik";
 import { loginValidationSchema } from "../../utils/validation";
@@ -9,7 +9,6 @@ import { LogIn } from "lucide-react";
 
 const LoginForm = () => {
   const { signIn } = useAuth();
-  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +20,6 @@ const LoginForm = () => {
       try {
         await signIn(values.email, values.password);
         toast.success("Login successful!");
-        navigate("/");
       } catch (error: any) {
         setStatus("Invalid email or password. Please try again.");
       } finally {
