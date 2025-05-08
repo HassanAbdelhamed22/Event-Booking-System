@@ -1,32 +1,38 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Toaster } from "react-hot-toast";
+import { Route, Routes } from "react-router-dom";
+import UnauthorizedPage from "./pages/UnauthorizedPage";
+import PageNotFound from "./pages/PageNotFound";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import SecureRoute from "./routes/SecureRoute";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <div className="flex flex-column items-center justify-center gap-2">
-      <div className="flex flex-row items-center justify-center gap-2">
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>
+      <Toaster position="top-center" />
+
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+          {/* Admin Routes */}
+          <Route element={<SecureRoute allowedRoles={["admin"]} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          </Route>
+
+          {/* User Routes */}
+          <Route element={<SecureRoute allowedRoles={["user"]} />}>
+            <Route path="/user-dashboard" element={<div>User Dashboard</div>} />
+          </Route>
+
+          {/* Not Found Page */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
     </div>
   );
 }
