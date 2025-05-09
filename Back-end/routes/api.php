@@ -60,4 +60,5 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::put('/events/bookings/{booking}', [BookingController::class, 'updateBooking']);
     Route::delete('/events/bookings/{booking}', [BookingController::class, 'deleteBooking']);
     Route::get('/user/bookings', [BookingController::class, 'getUserBookings']);
+    Route::get('/events/{event}/bookings/check', [BookingController::class, 'checkUserBookedEvent']);
 });
