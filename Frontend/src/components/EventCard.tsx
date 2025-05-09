@@ -29,9 +29,9 @@ const EventCard: React.FC<EventCardProps> = ({
   return (
     <Card className="flex flex-col h-full animate-fade-in">
       <div className="aspect-[16/9] relative overflow-hidden">
-        {event.imageUrl ? (
+        {event.category.image ? (
           <img
-            src={event.imageUrl}
+            src={event.category.image}
             alt={event.name}
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
@@ -43,7 +43,7 @@ const EventCard: React.FC<EventCardProps> = ({
           />
         )}
         <div className="absolute top-3 right-3">
-          <Badge variant="primary">{event.category}</Badge>
+          <Badge variant="primary">{event.category.name}</Badge>
         </div>
       </div>
 
