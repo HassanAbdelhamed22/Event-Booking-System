@@ -17,8 +17,7 @@ class Event extends Model
         'end_time',
         'location',
         'organizer',
-        'category',
-        'image',
+        'category_id',
         'status',
         'ticket_price',
         'venue_name',
@@ -27,5 +26,10 @@ class Event extends Model
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
