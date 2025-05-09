@@ -9,6 +9,8 @@ import EventList from "../components/EventList";
 import Loading from "../components/UI/Loading";
 import Error from "../components/UI/Error";
 import categoryImage from "../assets/fireworks.jpg";
+import homeImage from "../assets/homePage1.webp";
+import homeImage2 from "../assets/homePage2.webp";
 import Footer from "../layouts/Footer";
 
 const HomePage = () => {
@@ -73,7 +75,7 @@ const HomePage = () => {
               <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-secondary-500 rounded-full opacity-20"></div>
               <div className="relative z-10 bg-white p-3 rounded-lg shadow-xl rotate-3 transform transition-transform hover:rotate-0">
                 <img
-                  src="https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  src={homeImage}
                   alt="Event"
                   loading="lazy"
                   className="rounded-lg w-full h-64 object-cover"
@@ -81,7 +83,7 @@ const HomePage = () => {
               </div>
               <div className="absolute top-1/4 -right-4 z-20 bg-white p-2 rounded-lg shadow-lg -rotate-6 transform transition-transform hover:rotate-0">
                 <img
-                  src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                  src={homeImage2}
                   alt="Event"
                   loading="lazy"
                   className="rounded-lg w-48 h-32 object-cover"
