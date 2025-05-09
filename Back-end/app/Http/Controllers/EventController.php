@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
@@ -10,7 +11,7 @@ class EventController extends Controller
     // Get all events
     public function index()
     {
-        $events = Event::paginate(10);
+        $events = Event::with('category')->paginate(10);
         return response()->json([
             'events' => $events->items(),
             'pagination' => [
@@ -25,14 +26,14 @@ class EventController extends Controller
     // Get a single event
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $event = Event::with('category')->findOrFail($id);
         return response()->json($event, 200);
     }
 
     // Get Categories
     public function getCategories()
     {
-        $categories = Event::select('category', 'image')->distinct()->get();
+        $categories = Category::all();
         return response()->json($categories, 200);
     }
 
