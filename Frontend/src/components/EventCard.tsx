@@ -6,6 +6,7 @@ import type { Event } from "../types";
 import Badge from "./UI/Badge";
 import Card, { CardContent, CardFooter } from "./UI/Card";
 import Button from "./UI/Button";
+import img from "../assets/homePage1.webp";
 
 interface EventCardProps {
   event: Event;
@@ -37,9 +38,10 @@ const EventCard: React.FC<EventCardProps> = ({
           />
         ) : (
           <img
-            src="https://images.pexels.com/photos/2774556/pexels-photo-2774556.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            src={img}
             alt="Placeholder"
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
           />
         )}
         <div className="absolute top-3 right-3">
