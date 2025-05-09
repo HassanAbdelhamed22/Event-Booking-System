@@ -34,3 +34,34 @@ export interface RegisterCredentials extends LoginCredentials {
   name: string;
   password_confirmation: string;
 }
+
+export interface Event {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  date: string;
+  venue_name: string;
+  ticket_price: number;
+  imageUrl: string;
+  createdBy: string;
+  createdAt: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+  organizer: string;
+}
+
+export interface Booking {
+  id: string;
+  user_id: string;
+  event_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+
+export interface Category {
+  category: string;
+  image: string;
+}
