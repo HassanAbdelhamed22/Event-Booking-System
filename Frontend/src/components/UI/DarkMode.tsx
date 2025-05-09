@@ -41,12 +41,14 @@ const DarkMode = ({ className = "" }: IProps) => {
           src={sun}
           alt="sun icon"
           className="transition-transform duration-300 ease-in-out w-6 h-6 "
+          loading="lazy"
         />
       ) : (
         <img
           src={moon}
           alt="moon icon"
           className="transition-transform duration-300 ease-in-out w-6 h-6 "
+          loading="lazy"
         />
       )}
     </button>
