@@ -8,12 +8,14 @@ import { Calendar, ChevronRight } from "lucide-react";
 import EventList from "../components/EventList";
 import Loading from "../components/UI/Loading";
 import Error from "../components/UI/Error";
+import categoryImage from "../assets/fireworks.jpg";
+import Footer from "../layouts/Footer";
 
 const HomePage = () => {
   const { user } = useAuth();
   const [events, setEvents] = useState<Event[]>([]);
   const [userBookings, setUserBookings] = useState<Booking[]>([]);
-  // const [category, setCategory] = useState<Category[]>([]);
+  const [category, setCategory] = useState<Category[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -24,8 +26,8 @@ const HomePage = () => {
       const { data } = await getEvents();
       setEvents(data.events);
 
-      // const { data: categories } = await getCategories();
-      // setCategory(categories);
+      const { data: categories } = await getCategories();
+      setCategory(categories);
 
       if (user) {
         const bookingsResponse = await getUserBookings();
@@ -127,26 +129,24 @@ const HomePage = () => {
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {["Technology", "Music", "Business", "Food & Drink"].map(
-              (category) => (
-                <div
-                  key={category}
-                  className="relative overflow-hidden rounded-lg h-40 group shadow-md transition-transform hover:scale-[1.02]"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-70"></div>
-                  <img
-                    src={`https://source.unsplash.com/featured/?${category.toLowerCase()}`}
-                    alt={category}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-bold text-xl">
-                      {category}
-                    </span>
-                  </div>
+            {category.map((category) => (
+              <div
+                key={category.id}
+                className="relative overflow-hidden rounded-lg h-40 group shadow-md transition-transform hover:scale-[1.05] cursor-pointer duration-300"
+              >
+                <img
+                  src={category.image || categoryImage}
+                  alt={category.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-70 transition-opacity"></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-white font-bold text-xl md:text-2xl text-center px-2">
+                    {category.name}
+                  </span>
                 </div>
-              )
-            )}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -169,6 +169,7 @@ const HomePage = () => {
       </section>
 
       {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };
