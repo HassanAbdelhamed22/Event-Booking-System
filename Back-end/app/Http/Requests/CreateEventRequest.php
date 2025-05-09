@@ -29,9 +29,7 @@ class CreateEventRequest extends FormRequest
             'end_time' => 'required|date_format:H:i|after:start_time',
             'location' => 'required|string|max:255',
             'organizer' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required|in:upcoming,ongoing,completed,canceled',
+            'category_id' => 'required|exists:categories,id',
             'ticket_price' => 'required|numeric|min:0',
             'venue_name' => 'nullable|string|max:255',
         ];

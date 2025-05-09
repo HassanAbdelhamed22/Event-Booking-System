@@ -4,15 +4,11 @@ import api from "./api";
 import type { LoginCredentials, RegisterCredentials } from "../types";
 
 export const login = async (credentials: LoginCredentials) => {
-  const { data, status } = await axios.post(
-    `${BASE_URL}login`,
-    credentials,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const { data, status } = await axios.post(`${BASE_URL}login`, credentials, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
   return { data, status };
 };
 
@@ -39,7 +35,7 @@ export const signOut = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const { data, status } = await api.post(`${BASE_URL}user`, null, {
+  const { data, status } = await api.get(`${BASE_URL}user`, {
     headers: {
       "Content-Type": "application/json",
     },

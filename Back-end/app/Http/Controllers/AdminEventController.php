@@ -18,12 +18,7 @@ class AdminEventController extends Controller
         Log::info('Authenticated User:', $user ? $user->toArray() : 'No user found');
 
         $validatedData = $request->validated();
-
-        // Handle image upload if present
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('event_images', 'public');
-            $validatedData['image'] = $imagePath;
-        }
+        $validatedData['category_id'] = $request->input('category_id');
 
         // Create the event
         $event = Event::create($validatedData);

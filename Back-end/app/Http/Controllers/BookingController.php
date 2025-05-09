@@ -113,4 +113,19 @@ class BookingController extends Controller
 
         return response()->json(['message' => 'Booking deleted successfully'], 200);
     }
+
+    public function checkUserBookedEvent($eventId)
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // Check if the user has booked the event
+        $hasBooked = Booking::where('user_id', auth()->id())
+            ->where('event_id', $eventId)
+            ->exists();
+
+        return response()->json(['has_booked' => $hasBooked], 200);
+    }
 }
