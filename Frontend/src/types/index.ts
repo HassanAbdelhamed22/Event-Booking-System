@@ -39,17 +39,19 @@ export interface Event {
   id: string;
   name: string;
   description: string;
-  category: string;
   date: string;
   venue_name: string;
   ticket_price: number;
-  imageUrl: string;
   createdBy: string;
   createdAt: string;
   location: string;
   start_time: string;
   end_time: string;
   organizer: string;
+  category: {
+    name: string;
+    image?: string;
+  };
 }
 
 export interface Booking {
@@ -60,8 +62,8 @@ export interface Booking {
   updated_at: string;
 }
 
-
 export interface Category {
-  category: string;
+  id: string;
+  name: string;
   image: string;
 }
