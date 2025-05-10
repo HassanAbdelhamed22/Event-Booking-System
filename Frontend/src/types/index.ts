@@ -49,6 +49,7 @@ export interface Event {
   end_time: string;
   organizer: string;
   category: {
+    id: string;
     name: string;
     image?: string;
   };
@@ -66,4 +67,19 @@ export interface Category {
   id: string;
   name: string;
   image: string;
+}
+
+// Add this to your types file
+export interface EventFormValues {
+  id: string;
+  name: string;
+  description: string;
+  date: string;
+  venue_name: string;
+  ticket_price: number;
+  location: string;
+  start_time: string;
+  end_time: string;
+  organizer: string;
+  category_id: string;
 }
