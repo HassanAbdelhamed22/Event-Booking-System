@@ -10,13 +10,13 @@ import {
 import Button from "../UI/Button";
 import type { Event } from "../../types";
 
-interface AllCoursesTableProps {
+interface AllEventsTableProps {
   events: Event[];
   onDelete: (event: Event) => void;
   onEdit: (event: Event) => void;
 }
 
-const AllCoursesTable: React.FC<AllCoursesTableProps> = ({ events, onDelete, onEdit }) => {
+const AllEventsTable: React.FC<AllEventsTableProps> = ({ events, onDelete, onEdit }) => {
   return (
     <Table>
       <TableHeader>
@@ -74,4 +74,4 @@ const AllCoursesTable: React.FC<AllCoursesTableProps> = ({ events, onDelete, onE
   );
 };
 
-export default AllCoursesTable;
+export default AllEventsTable;
