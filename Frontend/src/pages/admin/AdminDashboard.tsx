@@ -5,6 +5,7 @@ import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
+import AllEventsTable from "../../components/tables/EventsTable";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -121,10 +122,8 @@ const AdminDashboard = () => {
               {error}
             </div>
           ) : (
-            // <EventsTable events={events} onDelete={handleEventsUpdated} />
-            <div className="bg-error-50 text-error-700 p-4 rounded-md">
-              No events found
-            </div>
+            <AllEventsTable events={events} onDelete={handleEventsUpdated} />
+            
           )}
         </div>
       </main>
