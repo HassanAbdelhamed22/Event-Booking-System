@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { getEvents } from "../../services/event";
-import type { Event } from "../../types";
+import type { Event, EventFormValues } from "../../types";
 import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
 import AllEventsTable from "../../components/tables/EventsTable";
+import { deleteEvent, updateEvent } from "../../services/eventAdmin";
+import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -29,13 +31,36 @@ const AdminDashboard = () => {
     fetchEvents();
   }, []);
 
-  const handleEventsUpdated = async () => {
+  const handleEventsUpdated = async (event: EventFormValues) => {
     try {
       setLoading(true);
-      const { data } = await getEvents();
-      setEvents(data.events);
+      const { data } = await updateEvent(event.id, event);
+      console.log("Event updated successfully:", data);
+      toast.success("Event updated successfully!");
+
+      // Refresh the events list after updating
+      const { data: refreshedEvents } = await getEvents();
+      setEvents(refreshedEvents.events);
     } catch (error) {
-      console.error("Error refreshing events:", error);
+      console.error("Error updating event:", error);
+      toast.error((error as any)?.response?.data?.message || "Failed to update event");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async (event: Event) => {
+    try {
+      setLoading(true);
+      await deleteEvent(event.id);
+      toast.success("Event deleted successfully!");
+      console.log("Event deleted successfully");
+
+      // Refresh the events list after deletion
+      const { data: refreshedEvents } = await getEvents();
+      setEvents(refreshedEvents.events);
+    } catch (error) {
+      console.error("Error deleting event:", error);
     } finally {
       setLoading(false);
     }
@@ -122,8 +147,11 @@ const AdminDashboard = () => {
               {error}
             </div>
           ) : (
-            <AllEventsTable events={events} onDelete={handleEventsUpdated} />
-            
+            <AllEventsTable
+              events={events}
+              onDelete={handleDeleteEvent}
+              onEdit={handleEventsUpdated}
+            />
           )}
         </div>
       </main>
