@@ -3,26 +3,28 @@ import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import type { HTMLAttributes, ReactNode } from "react";
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   "flex items-center justify-center rounded-md font-medium text-white duration-300 dark:text-black disabled:bg-indigo-400 disabled:hover:bg-indigo-400 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
         // ** FILLED
         default:
-          "bg-slate-900 dark:bg-indigo-600 dark:text-white dark:hover:bg-indigo-700",
+          "bg-primary-600 hover:bg-primary-800 dark:text-white disabled:cursor-not-allowed",
         danger:
-          "bg-red-900 dark:bg-[#c2344d] dark:text-white dark:hover:bg-red-700",
+          "bg-red-900 dark:bg-[#c2344d] dark:text-white dark:hover:bg-red-700 hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-[#c8485f] disabled:hover:bg-[#c8485f]",
         cancel:
-          "bg-gray-300 text-gray-700 dark:bg-[#f5f5fa] dark:text-lightText hover:bg-gray-400 dark:hover:bg-gray-300",
+          "bg-gray-300 text-gray-900 hover:bg-gray-400 hover:text-gray-700 disabled:bg-gray-300 disabled:text-gray-400 hover:disabled:bg-gray-300",
 
         // ** OUTLINE
         outline:
-          "border border-indigo-400 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-indigo-600 dark:text-gray-700 dark:hover:text-white",
+          "border border-indigo-400 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-indigo-600  disabled:cursor-not-allowed hover:disabled:bg-transparent disabled:bg-transparent hover:disabled:border-indigo-400 disabled:text-gray-400 hover:disabled:text-gray-400",
+        ghost: "text-gray-600 hover:bg-gray-100",
       },
       size: {
         default: "p-3",
         sm: "text-sm px-4 py-2",
+        icon: "h-9 w-9",
       },
       fullWidth: {
         true: "w-full",
