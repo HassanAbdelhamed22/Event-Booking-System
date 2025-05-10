@@ -1,7 +1,7 @@
 import { cn } from "../../lib/utils";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 export const buttonVariants = cva(
   "flex items-center justify-center rounded-md font-medium text-white duration-300 dark:text-black disabled:bg-indigo-400 disabled:hover:bg-indigo-400 disabled:cursor-not-allowed",
@@ -38,7 +38,7 @@ export const buttonVariants = cva(
 );
 
 interface ButtonProps
-  extends HTMLAttributes<HTMLButtonElement>,
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   children: ReactNode;
   isLoading?: boolean;
@@ -63,7 +63,7 @@ const Button = ({
       type={type}
       className={cn(buttonVariants({ variant, size, fullWidth, className }))}
       {...props}
-      disabled={isLoading}
+      disabled={isLoading || props.disabled}
     >
       {isLoading ? (
         <svg
