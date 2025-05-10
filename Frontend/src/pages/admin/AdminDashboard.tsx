@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getEvents } from "../../services/event";
 import type { Event, EventFormValues } from "../../types";
 import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
@@ -12,10 +12,12 @@ import {
   updateEvent,
 } from "../../services/eventAdmin";
 import toast from "react-hot-toast";
+import { getTotalBookings } from "../../services/bookingAdmin";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [revenue, setRevenue] = useState<number>(0);
+  const [totalBookingsCount, setTotalBookingsCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -53,6 +55,20 @@ const AdminDashboard = () => {
     };
 
     fetchRevenue();
+  }, []);
+
+  useEffect(() => {
+    const fetchTotalBookings = async () => {
+      try {
+        const { data } = await getTotalBookings();
+        console.log("Total bookings data:", data);
+        setTotalBookingsCount(data.total_bookings);
+      } catch (error) {
+        console.error("Error fetching total bookings:", error);
+      }
+    };
+
+    fetchTotalBookings();
   }, []);
 
   const handleEventsUpdated = async (event: EventFormValues) => {
@@ -94,7 +110,7 @@ const AdminDashboard = () => {
 
   // Calculate statistics
   const totalEvents = events.length;
-  // const totalCapacity = events.reduce((sum, event) => sum + event.capacity, 0);
+  const totalBookings = Number(totalBookingsCount);
   const totalRevenue = Number(revenue);
 
   return (
@@ -132,8 +148,8 @@ const AdminDashboard = () => {
                 <Users className="h-6 w-6 text-secondary-700" />
               </div>
               <div>
-                {/* <h3 className="text-lg font-bold">{totalCapacity}</h3> */}
-                <p className="text-sm text-gray-600">Total Capacity</p>
+                <h3 className="text-lg font-bold">{totalBookings}</h3>
+                <p className="text-sm text-gray-600">Total Bookings</p>
               </div>
             </div>
 
