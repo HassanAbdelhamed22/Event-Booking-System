@@ -17,8 +17,13 @@ class UpdateEventRequest extends FormRequest
             'name' => 'sometimes|required|string|max:255',
             'description' => 'sometimes|required|string',
             'date' => 'sometimes|required|date',
+            'start_time' => 'sometimes|required|date_format:H:i',
+            'end_time' => 'sometimes|required|date_format:H:i|after:start_time',
             'location' => 'sometimes|required|string|max:255',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'venue_name' => 'sometimes|required|string|max:255',
+            'organizer' => 'sometimes|required|string|max:255',
+            'ticket_price' => 'sometimes|required|numeric|min:0',
+            'category_id' => 'sometimes|required|exists:categories,id',
         ];
     }
 }
