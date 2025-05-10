@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { getEvents } from "../../services/event";
 import type { Event, EventFormValues } from "../../types";
 import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
@@ -6,11 +6,16 @@ import { Link } from "react-router-dom";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
 import AllEventsTable from "../../components/tables/EventsTable";
-import { deleteEvent, updateEvent } from "../../services/eventAdmin";
+import {
+  deleteEvent,
+  getEventsWithRevenue,
+  updateEvent,
+} from "../../services/eventAdmin";
 import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
+  const [revenue, setRevenue] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -31,6 +36,25 @@ const AdminDashboard = () => {
     fetchEvents();
   }, []);
 
+  useEffect(() => {
+    const fetchRevenue = async () => {
+      try {
+        const { data } = await getEventsWithRevenue();
+        const totalRevenue = data.events.reduce(
+          (sum: number, event: { potential_revenue: string }) =>
+            sum + Number(event.potential_revenue),
+          0
+        );
+
+        setRevenue(totalRevenue);
+      } catch (error) {
+        console.error("Error fetching revenue:", error);
+      }
+    };
+
+    fetchRevenue();
+  }, []);
+
   const handleEventsUpdated = async (event: EventFormValues) => {
     try {
       setLoading(true);
@@ -43,7 +67,9 @@ const AdminDashboard = () => {
       setEvents(refreshedEvents.events);
     } catch (error) {
       console.error("Error updating event:", error);
-      toast.error((error as any)?.response?.data?.message || "Failed to update event");
+      toast.error(
+        (error as any)?.response?.data?.message || "Failed to update event"
+      );
     } finally {
       setLoading(false);
     }
@@ -69,10 +95,7 @@ const AdminDashboard = () => {
   // Calculate statistics
   const totalEvents = events.length;
   // const totalCapacity = events.reduce((sum, event) => sum + event.capacity, 0);
-  const totalRevenue = events.reduce(
-    (sum, event) => sum + Number(event.ticket_price),
-    0
-  );
+  const totalRevenue = Number(revenue);
 
   return (
     <div className="min-h-screen flex flex-col">
