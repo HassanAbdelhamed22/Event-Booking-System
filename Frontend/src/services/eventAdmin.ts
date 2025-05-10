@@ -50,3 +50,12 @@ export const deleteEvent = async (id: string) => {
   });
   return { data, status };
 };
+
+export const getEventsWithRevenue = async () => {
+  const { data, status } = await api.get(`${BASE_URL}admin/events-with-revenue`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return { data, status };
+}
