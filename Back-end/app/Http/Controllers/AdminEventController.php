@@ -34,12 +34,6 @@ class AdminEventController extends Controller
         // Validate the request
         $validatedData = $request->validated();
 
-        // Handle image upload if present
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('event_images', 'public');
-            $validatedData['image'] = $imagePath;
-        }
-
         // Update the event
         $event->update($validatedData);
 
