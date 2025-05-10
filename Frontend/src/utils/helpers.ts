@@ -12,3 +12,10 @@ export const removeUserData = () => {
   localStorage.removeItem("role");
   localStorage.removeItem("tokenExpiry");
 };
+
+export const formatTime = (time: string) => {
+  const [hour, minute] = time.split(":").map(Number);
+  const period = hour >= 12 ? "PM" : "AM";
+  const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12-hour format
+  return `${formattedHour}:${minute.toString().padStart(2, "0")} ${period}`;
+};
