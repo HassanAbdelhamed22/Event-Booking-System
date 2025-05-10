@@ -10,7 +10,7 @@ export const buttonVariants = cva(
       variant: {
         // ** FILLED
         default:
-          "bg-primary-600 hover:bg-primary-800 dark:text-white disabled:cursor-not-allowed",
+          "bg-primary-700 hover:bg-primary-800 dark:text-white disabled:cursor-not-allowed",
         danger:
           "bg-red-900 dark:bg-[#c2344d] dark:text-white dark:hover:bg-red-700 hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-[#c8485f] disabled:hover:bg-[#c8485f]",
         cancel:
@@ -18,7 +18,7 @@ export const buttonVariants = cva(
 
         // ** OUTLINE
         outline:
-          "border border-indigo-400 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-indigo-600  disabled:cursor-not-allowed hover:disabled:bg-transparent disabled:bg-transparent hover:disabled:border-indigo-400 disabled:text-gray-400 hover:disabled:text-gray-400",
+          "border border-indigo-400 hover:text-white bg-transparent text-black hover:border-transparent hover:bg-primary-700  disabled:cursor-not-allowed hover:disabled:bg-transparent disabled:bg-transparent hover:disabled:border-indigo-400 disabled:text-gray-400 hover:disabled:text-gray-400",
         ghost: "text-gray-600 hover:bg-gray-100",
       },
       size: {
