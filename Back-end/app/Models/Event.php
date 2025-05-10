@@ -32,4 +32,9 @@ class Event extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public function getPotentialRevenueAttribute()
+    {
+        return $this->bookings->sum('total_price');
+    }
 }
