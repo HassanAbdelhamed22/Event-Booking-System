@@ -9,6 +9,7 @@ import {
 } from "../UI/Table";
 import Button from "../UI/Button";
 import type { Event } from "../../types";
+import { formatTime } from "../../utils/helpers";
 
 interface AllEventsTableProps {
   events: Event[];
@@ -16,21 +17,24 @@ interface AllEventsTableProps {
   onEdit: (event: Event) => void;
 }
 
-const AllEventsTable: React.FC<AllEventsTableProps> = ({ events, onDelete, onEdit }) => {
+const AllEventsTable: React.FC<AllEventsTableProps> = ({
+  events,
+  onDelete,
+  onEdit,
+}) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-/12">ID</TableHead>
+          <TableHead className="w-1/12">ID</TableHead>
           <TableHead className="w-2/12">Event Name</TableHead>
-          <TableHead className="w-3/12">Description</TableHead>
+          <TableHead className="w-2/12">Description</TableHead>
           <TableHead className="w-2/12">Date</TableHead>
           <TableHead className="w-2/12">Time</TableHead>
           <TableHead className="w-2/12">Location</TableHead>
           <TableHead className="w-2/12">Venue</TableHead>
-          <TableHead className="w-2/12"></TableHead>
-          <TableHead className="w-2/12">Category</TableHead>
-          <TableHead className="w-/12">Actions</TableHead>
+          <TableHead className="w-1/12">Category</TableHead>
+          <TableHead className="w-1/12">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -41,10 +45,11 @@ const AllEventsTable: React.FC<AllEventsTableProps> = ({ events, onDelete, onEdi
             <TableCell>{event.description}</TableCell>
             <TableCell>{event.date}</TableCell>
             <TableCell>
-              {event.start_time} - {event.end_time}
+              {formatTime(event.start_time)} - {formatTime(event.end_time)}
             </TableCell>
             <TableCell>{event.location}</TableCell>
             <TableCell>{event.venue_name}</TableCell>
+            <TableCell>{event.category.name}</TableCell>
             <TableCell>
               <div className="flex gap-2">
                 <Button
