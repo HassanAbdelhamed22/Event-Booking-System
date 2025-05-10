@@ -1,5 +1,4 @@
 import axios from "axios";
-import toast from "react-hot-toast";
 import { removeUserData } from "../utils/helpers";
 
 const api = axios.create({
@@ -36,7 +35,6 @@ api.interceptors.response.use(
 
       // Clear user data and redirect to login page
       removeUserData();
-      toast.error("Session expired. Please log in again");
       window.open("/login", "_blank"); // Open login page in a new tab
     }
     return Promise.reject(error);
