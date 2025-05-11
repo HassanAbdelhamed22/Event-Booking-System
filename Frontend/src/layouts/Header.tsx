@@ -65,14 +65,23 @@ const Header: React.FC = () => {
             )}
             {user ? (
               <>
-                <Link
-                  to="/bookings"
-                  className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
-                >
-                  My Bookings
-                </Link>
+                {user.role === "user" && (
+                  <Link
+                    to="/bookings"
+                    className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                  >
+                    My Bookings
+                  </Link>
+                )}
+
                 {user.role === "admin" && (
                   <>
+                    <Link
+                      to="admin/bookings"
+                      className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                    >
+                      Bookings
+                    </Link>
                     <Link
                       to="/admin/Categories"
                       className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
