@@ -64,7 +64,7 @@ export interface Booking {
 }
 
 export interface Category {
-  id: string;
+  id?: string;
   name: string;
   image: string;
 }
