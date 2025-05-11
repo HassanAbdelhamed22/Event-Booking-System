@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getEvents } from "../../services/event";
 import type { Event, EventFormValues } from "../../types";
 import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
-import { Link } from "react-router-dom";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
 import AllEventsTable from "../../components/tables/EventsTable";
@@ -13,6 +12,7 @@ import {
 } from "../../services/eventAdmin";
 import toast from "react-hot-toast";
 import { getTotalBookings } from "../../services/bookingAdmin";
+import Button from "../../components/UI/Button";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -124,11 +124,10 @@ const AdminDashboard = () => {
               <h1 className="text-3xl font-bold mb-2">Admin Dashboard</h1>
               <p className="text-gray-600">Manage events and bookings</p>
             </div>
-            <Link to="/admin/events/new">
-              <button className="mt-4 md:mt-0 btn-primary">
-                Create New Event
-              </button>
-            </Link>
+
+            <Button className="mt-4 md:mt-0" variant="default">
+              Create New Event
+            </Button>
           </div>
 
           {/* Dashboard stats */}
