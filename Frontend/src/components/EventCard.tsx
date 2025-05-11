@@ -32,7 +32,7 @@ const EventCard: React.FC<EventCardProps> = ({
       <div className="aspect-[16/9] relative overflow-hidden">
         {event.category.image ? (
           <img
-            src={event.category.image}
+            src={`http://127.0.0.1:8000/storage/${event.category.image}`}
             alt={event.name}
             className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           />
