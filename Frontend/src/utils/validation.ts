@@ -18,7 +18,7 @@ export const loginValidationSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
 });
 
-export const updateEventValidationSchema = Yup.object().shape({
+export const EventValidationSchema = Yup.object().shape({
   name: Yup.string().required("Name is required").max(255),
   description: Yup.string().required("Description is required"),
   date: Yup.date().required("Date is required"),
