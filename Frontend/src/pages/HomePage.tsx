@@ -136,11 +136,21 @@ const HomePage = () => {
                 key={category.id}
                 className="relative overflow-hidden rounded-lg h-40 group shadow-md transition-transform hover:scale-[1.05] cursor-pointer duration-300"
               >
-                <img
-                  src={category.image || categoryImage}
-                  alt={category.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
+                {category.image ? (
+                  <img
+                    src={`http://127.0.0.1:8000/storage/${category.image}`}
+                    alt={category.name}
+                    className="absolute inset-0 w-full h-full object-fill"
+                    loading="lazy"
+                  />
+                ) : (
+                  <img
+                    src={categoryImage}
+                    alt="Placeholder"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                )}
                 <div className="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-70 transition-opacity"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-white font-bold text-xl md:text-2xl text-center px-2">
