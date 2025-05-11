@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdminCategoryController extends Controller
 {
@@ -22,13 +24,28 @@ class AdminCategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle image upload if present
+        $data = [
+            'name' => $request->name,
+            'image' => null,
+        ];
+
+        // Handle image upload
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('category_images', 'public');
-            $request['image'] = $imagePath;
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+
+            // Store in public disk
+            $path = $file->storeAs('category_images', $filename, 'public');
+
+            // Verify file exists
+            if (!Storage::disk('public')->exists($path)) {
+                throw new Exception("File failed to upload!");
+            }
+
+            $data['image'] = $path;
         }
 
-        $category = Category::create($request->all());
+        $category = Category::create($data);
 
         return response()->json($category, 201);
     }
