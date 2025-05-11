@@ -71,7 +71,7 @@ export interface Category {
 
 // Add this to your types file
 export interface EventFormValues {
-  id: string;
+  id?: string | null;
   name: string;
   description: string;
   date: string;
