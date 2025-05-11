@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import SecureRoute from "./routes/SecureRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Categories from "./pages/admin/Categories";
+import Booking from "./pages/admin/Booking";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route element={<SecureRoute allowedRoles={["admin"]} />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/Categories" element={<Categories />} />
+            <Route path="/admin/bookings" element={<Booking />} />
           </Route>
 
           {/* User Routes */}
