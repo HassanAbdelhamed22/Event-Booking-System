@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SecureRoute from "./routes/SecureRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import Categories from "./pages/admin/Categories";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
 
           {/* Admin Routes */}
           <Route element={<SecureRoute allowedRoles={["admin"]} />}>
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/Categories" element={<Categories />} />
           </Route>
 
           {/* User Routes */}
