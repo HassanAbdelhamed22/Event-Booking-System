@@ -39,12 +39,30 @@ const Header: React.FC = () => {
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              to="/"
-              className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
-            >
-              Home
-            </Link>
+            {user ? (
+              user.role === "admin" ? (
+                <Link
+                  to="/admin/dashboard"
+                  className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                >
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/"
+                  className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                >
+                  Home
+                </Link>
+              )
+            ) : (
+              <Link
+                to="/"
+                className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+              >
+                Home
+              </Link>
+            )}
             {user ? (
               <>
                 <Link
@@ -54,12 +72,20 @@ const Header: React.FC = () => {
                   My Bookings
                 </Link>
                 {user.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
-                  >
-                    Admin
-                  </Link>
+                  <>
+                    <Link
+                      to="/admin/Categories"
+                      className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                    >
+                      Categories
+                    </Link>
+                    <Link
+                      to="/admin"
+                      className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                    >
+                      Admin
+                    </Link>
+                  </>
                 )}
               </>
             ) : null}
@@ -143,13 +169,33 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white">
           <div className="px-4 pt-2 pb-4 space-y-4">
-            <Link
-              to="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
+            {user ? (
+              user.role === "admin" ? (
+                <Link
+                  to="/admin/dashboard"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Admin Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to="/"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Home
+                </Link>
+              )
+            ) : (
+              <Link
+                to="/"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Home
+              </Link>
+            )}
             {user ? (
               <>
                 <Link

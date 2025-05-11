@@ -32,3 +32,8 @@ export const EventValidationSchema = Yup.object().shape({
     .min(0, "Price must be positive"),
   category_id: Yup.number().required("Category is required"),
 });
+
+export const CategoryValidationSchema = Yup.object().shape({
+  name: Yup.string().required("Name is required").max(255),
+  image: Yup.string().nullable(),
+});

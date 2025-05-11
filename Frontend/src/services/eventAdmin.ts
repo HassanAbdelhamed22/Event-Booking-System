@@ -52,10 +52,57 @@ export const deleteEvent = async (id: string) => {
 };
 
 export const getEventsWithRevenue = async () => {
-  const { data, status } = await api.get(`${BASE_URL}admin/events-with-revenue`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const { data, status } = await api.get(
+    `${BASE_URL}admin/events-with-revenue`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   return { data, status };
-}
+};
+
+export const createCategory = async (categoryData: any) => {
+  const { data, status } = await api.post(
+    `${BASE_URL}admin/categories`,
+    categoryData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+  return { data, status };
+};
+
+export const updateCategory = async (id: string, formData: FormData) => {
+  try {
+    console.log("FormData in updateCategory:", formData);
+    const { data, status } = await api.post(
+      `${BASE_URL}admin/categories/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return { data, status };
+  } catch (error) {
+    console.error("Update category error:", error);
+    throw error;
+  }
+};
+
+export const deleteCategory = async (id: string) => {
+  const { data, status } = await api.delete(
+    `${BASE_URL}admin/categories/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return { data, status };
+};
