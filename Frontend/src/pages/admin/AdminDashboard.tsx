@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { getEvents } from "../../services/event";
-import type { Event, EventFormValues } from "../../types";
+import { getCategories, getEvents } from "../../services/event";
+import type { Category, Event, EventFormValues } from "../../types";
 import { CalendarClock, DollarSign, ListChecks, Users } from "lucide-react";
 import Header from "../../layouts/Header";
 import Footer from "../../layouts/Footer";
 import AllEventsTable from "../../components/tables/EventsTable";
 import {
+  createEvent,
   deleteEvent,
   getEventsWithRevenue,
   updateEvent,
@@ -13,11 +14,16 @@ import {
 import toast from "react-hot-toast";
 import { getTotalBookings } from "../../services/bookingAdmin";
 import Button from "../../components/UI/Button";
+import Modal from "../../components/UI/Modal";
+import EventForm from "../../components/forms/EventForm";
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [revenue, setRevenue] = useState<number>(0);
   const [totalBookingsCount, setTotalBookingsCount] = useState<number>(0);
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -71,8 +77,45 @@ const AdminDashboard = () => {
     fetchTotalBookings();
   }, []);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoadingCategories(true);
+      try {
+        const { data } = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const handleEventsCreated = async (event: EventFormValues) => {
+    try {
+      setLoading(true);
+      const { data } = await createEvent(event);
+      console.log("Event created successfully:", data);
+      toast.success("Event created successfully!");
+      setIsModelOpen(false);
+    } catch (error) {
+      console.error("Error creating event:", error);
+      toast.error(
+        (error as any)?.response?.data?.message || "Failed to create event"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEventsUpdated = async (event: EventFormValues) => {
     try {
+      if (!event.id) {
+        throw new Error("Event ID is required to update the event.");
+      }
+
       setLoading(true);
       const { data } = await updateEvent(event.id, event);
       console.log("Event updated successfully:", data);
@@ -108,6 +151,10 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleCancel = () => {
+    setIsModelOpen(false);
+  };
+
   // Calculate statistics
   const totalEvents = events.length;
   const totalBookings = Number(totalBookingsCount);
@@ -125,7 +172,11 @@ const AdminDashboard = () => {
               <p className="text-gray-600">Manage events and bookings</p>
             </div>
 
-            <Button className="mt-4 md:mt-0" variant="default">
+            <Button
+              className="mt-4 md:mt-0"
+              variant="default"
+              onClick={() => setIsModelOpen(true)}
+            >
               Create New Event
             </Button>
           </div>
@@ -195,6 +246,23 @@ const AdminDashboard = () => {
       </main>
 
       <Footer />
+
+      {loadingCategories ? (
+        <div>Loading categories...</div>
+      ) : (
+        <Modal
+          isOpen={isModelOpen}
+          closeModal={() => setIsModelOpen(false)}
+          title="Create New Event"
+        >
+          <EventForm
+            categories={categories}
+            onSave={handleEventsCreated}
+            onCancel={handleCancel}
+            isCreate={true}
+          />
+        </Modal>
+      )}
     </div>
   );
 };
