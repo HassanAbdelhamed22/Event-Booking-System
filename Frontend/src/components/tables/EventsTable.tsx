@@ -13,7 +13,7 @@ import { formatTime } from "../../utils/helpers";
 import { useEffect, useState } from "react";
 import Modal from "../UI/Modal";
 import { getCategories } from "../../services/event";
-import EditEventForm from "../forms/EditEventForm";
+import EventForm from "../forms/EventForm";
 
 interface AllEventsTableProps {
   events: Event[];
@@ -153,7 +153,7 @@ const AllEventsTable: React.FC<AllEventsTableProps> = ({
           loadingCategories ? (
             <div>Loading categories...</div>
           ) : (
-            <EditEventForm
+            <EventForm
               event={selectedEvent}
               onSave={(updatedEvent) => handleConfirm(updatedEvent)}
               categories={categories}
