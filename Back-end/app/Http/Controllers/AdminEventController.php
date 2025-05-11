@@ -11,6 +11,28 @@ use Illuminate\Support\Facades\Log;
 
 class AdminEventController extends Controller
 {
+
+    public function indexWithRevenue()
+    {
+        $events = Event::with(['category'])
+            ->withSum('bookings', 'total_price')
+            ->withCount('bookings')
+            ->get();
+
+        return response()->json([
+            'events' => $events->map(function ($event) {
+                return [
+                    'id' => $event->id,
+                    'name' => $event->name,
+                    'potential_revenue' => $event->bookings_sum_total_price ?? 0,
+                    'ticket_price' => $event->ticket_price,
+                    'bookings_count' => $event->bookings_count,
+                    'category' => $event->category,
+                ];
+            })
+        ]);
+    }
+
     // Create a new event
     public function create(CreateEventRequest $request)
     {
@@ -33,12 +55,6 @@ class AdminEventController extends Controller
 
         // Validate the request
         $validatedData = $request->validated();
-
-        // Handle image upload if present
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('event_images', 'public');
-            $validatedData['image'] = $imagePath;
-        }
 
         // Update the event
         $event->update($validatedData);

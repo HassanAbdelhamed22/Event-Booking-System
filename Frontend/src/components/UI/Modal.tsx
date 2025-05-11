@@ -1,28 +1,31 @@
 import { Dialog, DialogTitle, Transition } from "@headlessui/react";
-import { Fragment, type ReactNode } from "react";
+import { Fragment } from "react";
 
-interface IProps {
+interface ModalProps {
   isOpen: boolean;
   closeModal: () => void;
   title?: string;
   description?: string;
-  children: ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function Modal({
-  closeModal,
   isOpen,
+  closeModal,
   title,
-  children,
   description,
-}: IProps) {
+  children,
+}: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={closeModal}>
+      <Dialog as="div" className="relative z-50" onClose={closeModal}>
+        {/* Overlay */}
         <div
-          className="fixed inset-0  backdrop-blur-sm bg-black bg-opacity-25"
+          className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-25"
           aria-hidden="true"
         ></div>
+
+        {/* Modal Panel */}
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -32,32 +35,32 @@ export default function Modal({
           leaveFrom="opacity-100 scale-100"
           leaveTo="opacity-0 scale-95"
         >
-          <div className="fixed inset-0 z-10 w-screen overflow-y-auto ">
-            <div className="flex min-h-full items-center justify-center p-4 text-lightText dark:text-darkText">
-              <Dialog.Panel className="relative w-full max-w-md rounded-xl shadow-lg bg-lightBg dark:bg-darkBg p-6">
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <Dialog.Panel className="relative w-full max-w-md rounded-xl shadow-lg bg-white p-6">
+                {/* Title */}
                 {title && (
                   <DialogTitle
                     as="h3"
-                    className={`text-lg font-bold text-lightText dark:text-darkText ${
-                      title === "Edit this todo" || title === "Add new todo"
-                        ? "text-center"
-                        : "mt-3 max-w-sm"
-                    }`}
+                    className="text-lg font-bold text-darkGray"
                   >
                     {title}
                   </DialogTitle>
                 )}
-                <div className="mt-2">
-                  <p className="text-sm text-secondaryLightText dark:text-secondaryDarkText">
-                    {description}
-                  </p>
-                </div>
 
+                {/* Description */}
+                {description && (
+                  <div className="mt-2">
+                    <p className="text-sm text-mediumGray ">{description}</p>
+                  </div>
+                )}
+
+                {/* Content */}
                 <div className="mt-4">{children}</div>
 
                 {/* Close Button */}
                 <button
-                  className="absolute top-3 right-3 text-red-700 dark:text-red-500"
+                  className="absolute top-3 right-3 text-mediumGray  hover:text-red-600 "
                   onClick={closeModal}
                 >
                   <svg

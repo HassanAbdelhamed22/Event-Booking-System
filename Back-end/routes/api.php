@@ -49,6 +49,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::put('/admin/categories/{category}', [AdminCategoryController::class, 'update']);
     Route::delete('/admin/categories/{category}', [AdminCategoryController::class, 'destroy']);
     Route::get('/admin/categories', [AdminCategoryController::class, 'index']);
+    Route::get('/admin/events-with-revenue', [AdminEventController::class, 'indexWithRevenue']);
+    Route::get('admin/bookings/total', [AdminBookingController::class, 'totalBookingsCount']);
 });
 
 Route::group([], function () {

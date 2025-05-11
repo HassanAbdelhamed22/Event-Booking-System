@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
 {
+    public function totalBookingsCount()
+    {
+        return response()->json([
+            'total_bookings' => Booking::count()
+        ]);
+    }
+
     // Function to get all bookings for an event
     public function getEventBookings($eventId)
     {
