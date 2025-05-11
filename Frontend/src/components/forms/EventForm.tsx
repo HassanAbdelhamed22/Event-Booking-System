@@ -3,31 +3,48 @@ import Input from "../UI/Input";
 import Select from "../UI/Select";
 import Button from "../UI/Button";
 import type { Event, Category, EventFormValues } from "../../types";
-import { updateEventValidationSchema } from "../../utils/validation";
+import { EventValidationSchema } from "../../utils/validation";
 
-interface EditEventFormProps {
-  event: Event;
+interface EventFormProps {
+  event?: Event;
   categories: Category[];
   onSave: (updatedEvent: EventFormValues) => Promise<void>;
   onCancel: () => void;
+  isCreate?: boolean;
 }
 
-const EditEventForm = ({
+const EventForm = ({
   event,
   categories = [],
   onSave,
   onCancel,
-}: EditEventFormProps) => {
-  const initialValues: EventFormValues = {
-    ...event,
-    ticket_price: event.ticket_price || 0,
-    category_id: event.category.id,
+  isCreate = false,
+}: EventFormProps) => {
+  const defaultInitialValues: EventFormValues = {
+    name: "",
+    description: "",
+    date: "",
+    start_time: "",
+    end_time: "",
+    location: "",
+    venue_name: "",
+    organizer: "",
+    ticket_price: 0,
+    category_id: categories[0]?.id || "",
   };
+
+  const initialValues: EventFormValues = event
+    ? {
+        ...event,
+        ticket_price: event.ticket_price || 0,
+        category_id: event.category.id,
+      }
+    : defaultInitialValues;
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={updateEventValidationSchema}
+      validationSchema={EventValidationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         await onSave(values);
         setSubmitting(false);
@@ -212,7 +229,11 @@ const EditEventForm = ({
               Cancel
             </Button>
             <Button type="submit" variant="default" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Save Changes"}
+              {isSubmitting
+                ? "Saving..."
+                : isCreate
+                ? "Create Event"
+                : "Save Changes"}
             </Button>
           </div>
         </Form>
@@ -221,4 +242,4 @@ const EditEventForm = ({
   );
 };
 
-export default EditEventForm;
+export default EventForm;
