@@ -8,13 +8,24 @@ import categoryImage from "../../assets/fireworks.jpg";
 import Loading from "../../components/UI/Loading";
 import Error from "../../components/UI/Error";
 import toast from "react-hot-toast";
-import { createCategory } from "../../services/eventAdmin";
+import {
+  createCategory,
+  deleteCategory,
+  updateCategory,
+} from "../../services/eventAdmin";
 import Modal from "../../components/UI/Modal";
 import CategoryForm from "../../components/forms/CategoryForm";
+import EditCategoryForm from "../../components/forms/EditCategoryForm";
+import { Pencil, Trash2 } from "lucide-react";
 
 const Categories = () => {
-  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -40,7 +51,7 @@ const Categories = () => {
       setLoading(true);
       await createCategory(formData);
       toast.success("Category created successfully!");
-      setIsModelOpen(false);
+      setIsCreateModalOpen(false);
       // Refresh categories list
       const { data: updatedCategories } = await getCategories();
       setCategories(updatedCategories);
@@ -53,8 +64,56 @@ const Categories = () => {
     }
   };
 
+  const handleEditCategory = async (formData: FormData) => {
+    if (!selectedCategory) return;
+
+    try {
+      setLoading(true);
+      if (selectedCategory.id) {
+        await updateCategory(selectedCategory.id, formData);
+      } else {
+        toast.error("Category ID is missing.");
+      }
+      toast.success("Category updated successfully!");
+      setIsEditModalOpen(false);
+      // Refresh categories list
+      const { data: updatedCategories } = await getCategories();
+      setCategories(updatedCategories);
+    } catch (error) {
+      toast.error(
+        (error as any)?.response?.data?.message || "Failed to update category"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCategory = async () => {
+    if (!selectedCategory) return;
+
+    try {
+      setLoading(true);
+      if (selectedCategory?.id) {
+        await deleteCategory(selectedCategory.id);
+      } else {
+        toast.error("Category ID is missing.");
+      }
+      toast.success("Category deleted successfully!");
+      setIsDeleteModalOpen(false);
+      // Refresh categories list
+      const { data: updatedCategories } = await getCategories();
+      setCategories(updatedCategories);
+    } catch (error) {
+      toast.error(
+        (error as any)?.response?.data?.message || "Failed to delete category"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleModalClose = () => {
-    setIsModelOpen(false);
+    setIsCreateModalOpen(false);
   };
 
   if (loading) {
@@ -80,7 +139,7 @@ const Categories = () => {
             <Button
               className="mt-4 md:mt-0"
               variant="default"
-              onClick={() => setIsModelOpen(true)}
+              onClick={() => setIsCreateModalOpen(true)}
             >
               Create New Category
             </Button>
@@ -99,6 +158,7 @@ const Categories = () => {
                       src={`http://127.0.0.1:8000/storage/${category.image}`}
                       alt={category.name}
                       className="absolute inset-0 w-full h-full object-fill"
+                      loading="lazy"
                     />
                   ) : (
                     <img
@@ -114,6 +174,34 @@ const Categories = () => {
                       {category.name}
                     </span>
                   </div>
+
+                  {/* Action buttons (shown on hover) */}
+                  <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCategory(category);
+                        setIsEditModalOpen(true);
+                      }}
+                      className="bg-primary-100 hover:bg-primary-300 rounded-full p-2 duration-300"
+                    >
+                      <Pencil className="h-4 w-4 text-primary-700" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedCategory(category);
+                        setIsDeleteModalOpen(true);
+                      }}
+                      className="bg-red-100 hover:bg-red-300 rounded-full p-2 duration-300"
+                    >
+                      <Trash2 className="h-4 w-4 text-red-700" />
+                    </Button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -124,14 +212,42 @@ const Categories = () => {
       <Footer />
 
       <Modal
-        isOpen={isModelOpen}
-        closeModal={() => setIsModelOpen(false)}
+        isOpen={isCreateModalOpen}
+        closeModal={() => setIsCreateModalOpen(false)}
         title="Create New Category"
       >
         <CategoryForm
           onSave={handleCreateCategory}
           onCancel={handleModalClose}
         />
+      </Modal>
+
+      <Modal
+        isOpen={isEditModalOpen}
+        closeModal={() => setIsEditModalOpen(false)}
+        title="Edit Category"
+      >
+        <EditCategoryForm
+          category={selectedCategory!}
+          onSave={handleEditCategory}
+          onCancel={() => setIsEditModalOpen(false)}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        closeModal={() => setIsDeleteModalOpen(false)}
+        title="Delete Category"
+        description="Are you sure you want to delete this category? This action cannot be undone."
+      >
+        <div className="flex justify-end gap-4 mt-4">
+          <Button variant="cancel" onClick={() => setIsDeleteModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteCategory}>
+            Delete
+          </Button>
+        </div>
       </Modal>
     </div>
   );
