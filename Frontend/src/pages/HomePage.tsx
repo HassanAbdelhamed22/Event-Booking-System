@@ -6,6 +6,7 @@ import { getUserBookings } from "../services/booking";
 import Header from "../layouts/Header";
 import { Calendar, ChevronRight } from "lucide-react";
 import EventList from "../components/EventList";
+import BookingSuccessModal from "../components/BookingSuccessModal";
 import Loading from "../components/UI/Loading";
 import Error from "../components/UI/Error";
 import categoryImage from "../assets/fireworks.jpg";
@@ -18,9 +19,14 @@ const HomePage = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [userBookings, setUserBookings] = useState<Booking[]>([]);
   const [category, setCategory] = useState<Category[]>([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successModalData, setSuccessModalData] = useState<{
+    eventName: string;
+    ticketCount: number;
+    totalPrice: number;
+  } | null>(null);
 
   const fetchData = async () => {
     try {
@@ -45,6 +51,16 @@ const HomePage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleBookingCreated = (
+    eventName: string,
+    ticketCount: number,
+    totalPrice: number
+  ) => {
+    fetchData();
+    setSuccessModalData({ eventName, ticketCount, totalPrice });
+    setIsSuccessModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -117,7 +133,7 @@ const HomePage = () => {
             <EventList
               events={events}
               userBookings={userBookings}
-              onBookingCreated={fetchData}
+              onBookingCreated={handleBookingCreated}
             />
           )}
         </div>
@@ -180,8 +196,20 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* <Footer /> */}
       <Footer />
+
+      {successModalData && (
+        <BookingSuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={() => {
+            setIsSuccessModalOpen(false);
+            setSuccessModalData(null);
+          }}
+          eventName={successModalData.eventName}
+          ticketCount={successModalData.ticketCount}
+          totalPrice={successModalData.totalPrice}
+        />
+      )}
     </div>
   );
 };
