@@ -77,7 +77,7 @@ const Header: React.FC = () => {
                 {user.role === "admin" && (
                   <>
                     <Link
-                      to="admin/bookings"
+                      to="/admin/bookings"
                       className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
                     >
                       Bookings
