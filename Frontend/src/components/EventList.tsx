@@ -11,12 +11,15 @@ import {
 } from "../services/booking";
 import EventCard from "./EventCard";
 import BookingModal from "./BookingModal";
-import BookingSuccessModal from "./BookingSuccessModal";
 
 interface EventListProps {
   events: Event[];
   userBookings?: Booking[];
-  onBookingCreated?: () => void;
+  onBookingCreated?: (
+    eventName: string,
+    ticketCount: number,
+    totalPrice: number
+  ) => void;
 }
 
 const EventList: React.FC<EventListProps> = ({
@@ -30,10 +33,7 @@ const EventList: React.FC<EventListProps> = ({
   const [filteredEvents, setFilteredEvents] = useState<Event[]>(events);
   const [bookedEventIds, setBookedEventIds] = useState<Set<string>>(new Set());
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [ticketCount, setTicketCount] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(0);
 
   // Fetch user's bookings from the backend
   const fetchUserBookings = async () => {
@@ -43,7 +43,6 @@ const EventList: React.FC<EventListProps> = ({
     }
     try {
       const data = await getUserBookings();
-      // Access data.bookings, ensure it's an array
       const bookings = Array.isArray(data.bookings) ? data.bookings : [];
       const bookedIds = new Set<string>(
         bookings.map((booking: Booking) => booking.event_id)
@@ -113,19 +112,20 @@ const EventList: React.FC<EventListProps> = ({
 
       // Create a new booking
       await createBooking(selectedEvent.id, tickets);
-      setTicketCount(tickets);
-      setTotalPrice(tickets * Number(selectedEvent.ticket_price || 0));
+      const totalPrice = tickets * Number(selectedEvent.ticket_price || 0);
       setBookedEventIds((prev) => new Set(prev).add(selectedEvent.id));
 
       if (onBookingCreated) {
-        onBookingCreated();
+        onBookingCreated(selectedEvent.name, tickets, totalPrice);
       }
 
       setIsBookingModalOpen(false);
-      setIsSuccessModalOpen(true);
+      setSelectedEvent(null);
 
       // Refresh booked events after successful booking
-      await fetchUserBookings();
+      setTimeout(() => {
+        fetchUserBookings();
+      }, 100);
     } catch (error) {
       console.error("Error booking event:", error);
       toast.error("Failed to book event. Please try again.");
@@ -174,18 +174,6 @@ const EventList: React.FC<EventListProps> = ({
           onSubmit={handleBookingSubmit}
           eventName={selectedEvent.name}
           ticketPrice={Number(selectedEvent.ticket_price || 0)}
-        />
-      )}
-
-      {selectedEvent && (
-        <BookingSuccessModal
-          isOpen={isSuccessModalOpen}
-          onClose={() => {
-            setIsSuccessModalOpen(false);
-          }}
-          eventName={selectedEvent.name}
-          ticketCount={ticketCount}
-          totalPrice={totalPrice}
         />
       )}
     </div>
