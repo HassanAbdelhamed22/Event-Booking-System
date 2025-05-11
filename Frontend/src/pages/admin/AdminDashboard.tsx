@@ -67,7 +67,6 @@ const AdminDashboard = () => {
     const fetchTotalBookings = async () => {
       try {
         const { data } = await getTotalBookings();
-        console.log("Total bookings data:", data);
         setTotalBookingsCount(data.total_bookings);
       } catch (error) {
         console.error("Error fetching total bookings:", error);
@@ -96,8 +95,7 @@ const AdminDashboard = () => {
   const handleEventsCreated = async (event: EventFormValues) => {
     try {
       setLoading(true);
-      const { data } = await createEvent(event);
-      console.log("Event created successfully:", data);
+      await createEvent(event);
       toast.success("Event created successfully!");
       setIsModelOpen(false);
     } catch (error) {
@@ -117,8 +115,7 @@ const AdminDashboard = () => {
       }
 
       setLoading(true);
-      const { data } = await updateEvent(event.id, event);
-      console.log("Event updated successfully:", data);
+      await updateEvent(event.id, event);
       toast.success("Event updated successfully!");
 
       // Refresh the events list after updating
@@ -139,7 +136,6 @@ const AdminDashboard = () => {
       setLoading(true);
       await deleteEvent(event.id);
       toast.success("Event deleted successfully!");
-      console.log("Event deleted successfully");
 
       // Refresh the events list after deletion
       const { data: refreshedEvents } = await getEvents();

@@ -6,8 +6,7 @@ export const getUserBookings = async () => {
     const response = await api.get(`${BASE_URL}user/bookings`, {
       headers: { "Content-Type": "application/json" },
     });
-    console.log("getUserBookings raw response:", response); // Debug log
-    return response.data; // Ensure this returns { data: [{ event_id, ... }, ...] }
+    return response.data;
   } catch (error) {
     console.error("getUserBookings error:", error);
     throw error;
