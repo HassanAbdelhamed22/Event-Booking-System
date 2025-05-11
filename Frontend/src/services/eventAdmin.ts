@@ -52,10 +52,26 @@ export const deleteEvent = async (id: string) => {
 };
 
 export const getEventsWithRevenue = async () => {
-  const { data, status } = await api.get(`${BASE_URL}admin/events-with-revenue`, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const { data, status } = await api.get(
+    `${BASE_URL}admin/events-with-revenue`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   return { data, status };
-}
+};
+
+export const createCategory = async (categoryData: any) => {
+  const { data, status } = await api.post(
+    `${BASE_URL}admin/categories`,
+    categoryData,
+    {
+      headers: {
+        "Content-Type": "form-data",
+      },
+    }
+  );
+  return { data, status };
+};
