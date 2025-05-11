@@ -54,12 +54,20 @@ const Header: React.FC = () => {
                   My Bookings
                 </Link>
                 {user.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
-                  >
-                    Admin
-                  </Link>
+                  <>
+                    <Link
+                      to="/admin/Categories"
+                      className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                    >
+                      Categories
+                    </Link>
+                    <Link
+                      to="/admin"
+                      className="font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                    >
+                      Admin
+                    </Link>
+                  </>
                 )}
               </>
             ) : null}
