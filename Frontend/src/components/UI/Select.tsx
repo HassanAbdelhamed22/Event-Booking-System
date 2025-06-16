@@ -10,7 +10,7 @@ const Select = forwardRef<HTMLSelectElement, IProps>(
     return (
       <select
         ref={ref}
-        className={`border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm ${className}`}
+        className={`border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm ${className}`}
         {...rest}
       >
         {options.map((option) => (

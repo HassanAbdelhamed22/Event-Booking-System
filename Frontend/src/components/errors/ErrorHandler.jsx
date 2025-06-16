@@ -45,14 +45,14 @@ const ErrorHandler = ({ statusCode = 500, title = "Server Error" }) => {
         <div className="flex items-center justify-center space-x-4 my-10">
           <Link
             to={getHomePath()}
-            className="inline-block bg-indigoLight p-2 text-white hover:text-white! rounded-md"
+            className="inline-block bg-primaryLight p-2 text-white hover:text-white! rounded-md"
             reloadDocument
           >
             Home
           </Link>
           <Link
             to={pathname}
-            className="inline-block bg-indigoLight p-2 text-white hover:text-white! rounded-md"
+            className="inline-block bg-primaryLight p-2 text-white hover:text-white! rounded-md"
             reloadDocument
           >
             Refresh
