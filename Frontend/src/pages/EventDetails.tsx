@@ -23,6 +23,7 @@ import Badge from "../components/UI/Badge";
 import Button from "../components/UI/Button";
 import Modal from "../components/UI/Modal";
 import img from "../assets/homePage1.webp";
+import BookingSuccessModal from "../components/BookingSuccessModal";
 
 const EventDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +34,12 @@ const EventDetails = () => {
   const [error, setError] = useState("");
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [ticketCount, setTicketCount] = useState<number>(1);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [successModalData, setSuccessModalData] = useState<{
+    eventName: string;
+    ticketCount: number;
+    totalPrice: number;
+  } | null>(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -73,17 +80,38 @@ const EventDetails = () => {
     try {
       setLoading(true);
       await createBooking(event.id, ticketCount);
-      toast.success(
-        `Successfully booked ${ticketCount} ticket(s) for ${event.name}!`
-      );
+      const totalPrice = Number(event.ticket_price) * ticketCount;
+      setSuccessModalData({ eventName: event.name, ticketCount, totalPrice });
       setIsBookingModalOpen(false);
+      setIsSuccessModalOpen(true);
       setTicketCount(1);
+
       // Refresh event data to update bookings_count
       const { data } = await getEvent(event.id.toString());
       setEvent(data);
     } catch (err) {
-      console.error("Error booking event:", err);
-      toast.error("Failed to book event. Please try again.");
+      if (
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err &&
+        typeof (err as any).response === "object" &&
+        (err as any).response !== null &&
+        "data" in (err as any).response &&
+        typeof (err as any).response.data === "object" &&
+        (err as any).response.data !== null &&
+        "message" in (err as any).response.data
+      ) {
+        const errorMessage = (err as any).response.data.message;
+        console.error("Error booking event:", errorMessage);
+        toast.error(errorMessage);
+      } else {
+        console.error("Error booking event:", err);
+        toast.error(
+          typeof err === "object" && err !== null && "message" in err
+            ? (err as any).message
+            : "Failed to book event. Please try again."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -189,9 +217,11 @@ const EventDetails = () => {
                 </div>
               </CardContent>
               <CardFooter className="border-t border-gray-100 pt-4">
-                <Button className="w-full" onClick={handleBook}>
-                  Book Now
-                </Button>
+                <div className="flex space-x-2 w-full">
+                  <Button className="flex-1" onClick={handleBook}>
+                    Book Now
+                  </Button>
+                </div>
               </CardFooter>
             </div>
           </Card>
@@ -286,6 +316,19 @@ const EventDetails = () => {
           </div>
         </div>
       </Modal>
+
+      {successModalData && (
+        <BookingSuccessModal
+          isOpen={isSuccessModalOpen}
+          onClose={() => {
+            setIsSuccessModalOpen(false);
+            setSuccessModalData(null);
+          }}
+          eventName={successModalData.eventName}
+          ticketCount={successModalData.ticketCount}
+          totalPrice={successModalData.totalPrice}
+        />
+      )}
     </div>
   );
 };
