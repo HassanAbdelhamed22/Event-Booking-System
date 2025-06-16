@@ -4,13 +4,20 @@ import { format } from "date-fns";
 import toast from "react-hot-toast";
 import img from "../../assets/homePage1.webp";
 import { useAuth } from "../../context/AuthContext";
-import { getUserBookings } from "../../services/booking";
+import {
+  cancelBooking,
+  getUserBookings,
+  updateBooking,
+} from "../../services/booking";
 import Header from "../../layouts/Header";
 import Loading from "../../components/UI/Loading";
 import Error from "../../components/UI/Error";
 import Card, { CardContent, CardFooter } from "../../components/UI/Card";
 import Badge from "../../components/UI/Badge";
 import Footer from "../../layouts/Footer";
+import Button from "../../components/UI/Button";
+import Modal from "../../components/UI/Modal";
+import Input from "../../components/UI/Input";
 
 type Booking = {
   id: number;
@@ -47,30 +54,83 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [ticketCount, setTicketCount] = useState<number>(1);
+
+  const fetchBookings = async () => {
+    if (!user) {
+      setError("Please log in to view your bookings.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await getUserBookings();
+      setBookings(response.bookings || []);
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+      setError("Failed to fetch bookings. Please try again later.");
+      toast.error("Failed to load bookings.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      if (!user) {
-        setError("Please log in to view your bookings.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        const response = await getUserBookings();
-        setBookings(response.bookings || []);
-      } catch (err) {
-        console.error("Error fetching bookings:", err);
-        setError("Failed to fetch bookings. Please try again later.");
-        toast.error("Failed to load bookings.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchBookings();
   }, [user]);
+
+  const handleDeleteBooking = async () => {
+    if (!selectedBooking) return;
+
+    try {
+      setLoading(true);
+      await cancelBooking(selectedBooking.id.toString());
+      toast.success("Booking cancelled successfully!");
+      setIsDeleteModalOpen(false);
+      setSelectedBooking(null);
+      await fetchBookings();
+    } catch (err) {
+      console.error("Error cancelling booking:", err);
+      toast.error("Failed to cancel booking. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateBooking = async () => {
+    if (!selectedBooking) return;
+
+    try {
+      setLoading(true);
+      const updateData = { number_of_tickets: ticketCount };
+      await updateBooking(selectedBooking.id.toString(), updateData);
+      toast.success("Booking updated successfully!");
+      setIsUpdateModalOpen(false);
+      setSelectedBooking(null);
+      setTicketCount(1);
+      await fetchBookings();
+    } catch (err) {
+      console.error("Error updating booking:", err);
+      toast.error("Failed to update booking. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleUpdateClick = (booking: Booking) => {
+    setSelectedBooking(booking);
+    setTicketCount(booking.number_of_tickets);
+    setIsUpdateModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -180,12 +240,22 @@ const MyBookings = () => {
                   </CardContent>
 
                   <CardFooter className="border-t border-gray-100 pt-4">
-                    <Badge
-                      variant="primary"
-                      className="w-full py-2 flex justify-center"
-                    >
-                      Booking ID: {booking.id}
-                    </Badge>
+                    <div className="flex space-x-2 w-full">
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => handleUpdateClick(booking)}
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="flex-1"
+                        onClick={() => handleDeleteClick(booking)}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </CardFooter>
                 </Card>
               ))}
@@ -194,6 +264,71 @@ const MyBookings = () => {
         </div>
       </section>
 
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        closeModal={() => setIsDeleteModalOpen(false)}
+        title="Cancel Booking"
+        description="Are you sure you want to cancel this booking? This action cannot be undone."
+      >
+        <div className="flex space-x-2 mt-4">
+          <Button
+            variant="outline"
+            className="flex-1"
+            onClick={() => setIsDeleteModalOpen(false)}
+          >
+            No, Keep Booking
+          </Button>
+          <Button
+            variant="danger"
+            className="flex-1"
+            onClick={handleDeleteBooking}
+          >
+            Yes, Cancel Booking
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Update Booking Modal */}
+      <Modal
+        isOpen={isUpdateModalOpen}
+        closeModal={() => setIsUpdateModalOpen(false)}
+        title="Update Booking"
+        description="Adjust the number of tickets for your booking."
+      >
+        <div className="mt-4">
+          <label
+            htmlFor="ticketCount"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Number of Tickets
+          </label>
+          <Input
+            type="number"
+            id="ticketCount"
+            min="1"
+            value={ticketCount}
+            onChange={(e) => setTicketCount(Number(e.target.value))}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm "
+          />
+          <div className="flex space-x-2 mt-4">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setIsUpdateModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="default"
+              className="flex-1"
+              onClick={handleUpdateBooking}
+            >
+              Save Changes
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <Footer />
     </div>
   );
