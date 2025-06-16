@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (currentUser.role === "admin") {
         navigate("/admin/dashboard"); // Redirect to admin dashboard
       } else if (currentUser.role === "user") {
-        navigate("/user/dashboard"); // Redirect to user dashboard
+        navigate("/"); // Redirect to user dashboard
       } else {
         navigate("/unauthorized"); // Redirect to unauthorized page
       }

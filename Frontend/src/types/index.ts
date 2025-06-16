@@ -83,3 +83,26 @@ export interface EventFormValues {
   organizer: string;
   category_id: string;
 }
+
+export interface AdminBooking {
+  id: number;
+  user_id: number;
+  event_id: number;
+  number_of_tickets: number;
+  total_price: string;
+  created_at: string;
+  updated_at: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+  };
+  event: {
+    id: number;
+    name: string;
+    date: string;
+    location: string;
+    ticket_price: string;
+  };
+}

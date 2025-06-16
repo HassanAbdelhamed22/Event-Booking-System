@@ -9,3 +9,12 @@ export const getTotalBookings = async () => {
   });
   return { data, status };
 }
+
+export const getBookings = async () => {
+  const { data, status } = await api.get(`${BASE_URL}admin/bookings`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return { data, status };
+}

@@ -22,4 +22,13 @@ class AdminBookingController extends Controller
 
         return response()->json(['bookings' => $bookings], 200);
     }
+
+    // Function to get all bookings with user details and event information
+    public function getAllBookings()
+    {
+        // Fetch all bookings with user details and event information
+        $bookings = Booking::with(['user', 'event'])->get();
+
+        return response()->json(['bookings' => $bookings], 200);
+    }
 }
