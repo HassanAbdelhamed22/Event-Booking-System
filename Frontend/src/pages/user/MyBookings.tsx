@@ -309,11 +309,11 @@ const MyBookings = () => {
             min="1"
             value={ticketCount}
             onChange={(e) => setTicketCount(Number(e.target.value))}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm "
+            className="mt-1"
           />
           <div className="flex space-x-2 mt-4">
             <Button
-              variant="outline"
+              variant="cancel"
               className="flex-1"
               onClick={() => setIsUpdateModalOpen(false)}
             >
