@@ -190,8 +190,8 @@ const AdminDashboard = () => {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-md flex items-start">
-              <div className="bg-secondary-100 p-3 rounded-lg mr-4">
-                <Users className="h-6 w-6 text-secondary-700" />
+              <div className="bg-red-100 p-3 rounded-lg mr-4">
+                <Users className="h-6 w-6 text-red-700" />
               </div>
               <div>
                 <h3 className="text-lg font-bold">{totalBookings}</h3>
