@@ -10,6 +10,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import Categories from "./pages/admin/Categories";
 import Booking from "./pages/admin/Booking";
 import MyBookings from "./pages/user/MyBookings";
+import EventDetails from "./pages/EventDetails";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
+        <Route path="/event/:id" element={<EventDetails />} />
 
         {/* Admin Routes */}
         <Route element={<SecureRoute allowedRoles={["admin"]} />}>

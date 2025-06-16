@@ -22,7 +22,7 @@ const EventCard: React.FC<EventCardProps> = ({
   const navigate = useNavigate();
 
   const handleViewDetails = () => {
-    navigate(`/events/${event.id}`);
+    navigate(`/event/${event.id}`);
   };
 
   const formattedDate = format(new Date(event.date), "MMMM dd, yyyy");
