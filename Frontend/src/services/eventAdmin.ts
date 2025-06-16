@@ -24,8 +24,6 @@ export const updateEvent = async (id: string, eventData: any) => {
     ticket_price: Number(eventData.ticket_price),
   };
 
-  console.log("Final payload:", payload);
-
   try {
     const { data, status } = await api.put(
       `${BASE_URL}admin/events/${id}`,
@@ -78,7 +76,6 @@ export const createCategory = async (categoryData: any) => {
 
 export const updateCategory = async (id: string, formData: FormData) => {
   try {
-    console.log("FormData in updateCategory:", formData);
     const { data, status } = await api.post(
       `${BASE_URL}admin/categories/${id}`,
       formData,
