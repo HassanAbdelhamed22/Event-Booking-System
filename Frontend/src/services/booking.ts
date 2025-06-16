@@ -36,3 +36,20 @@ export const createBooking = async (
   );
   return { data, status };
 };
+
+export const cancelBooking = async (bookingId: string) => {
+  const { data, status } = await api.delete(
+    `${BASE_URL}events/bookings/${bookingId}`,
+    { headers: { "Content-Type": "application/json" } }
+  );
+  return { data, status };
+};
+
+export const updateBooking = async (bookingId: string, data: any) => {
+  const { data: updatedData, status } = await api.put(
+    `${BASE_URL}events/bookings/${bookingId}`,
+    data,
+    { headers: { "Content-Type": "application/json" } }
+  );
+  return { data: updatedData, status }
+};
