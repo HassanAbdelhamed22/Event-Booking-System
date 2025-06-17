@@ -10,7 +10,7 @@ import BookingSuccessModal from "../components/BookingSuccessModal";
 import Loading from "../components/UI/Loading";
 import Error from "../components/UI/Error";
 import categoryImage from "../assets/fireworks.jpg";
-import homeImage from "../assets/homePage1.webp";
+import homeImage from "../assets/event.jpg";
 import homeImage2 from "../assets/homePage2.webp";
 import Footer from "../layouts/Footer";
 
