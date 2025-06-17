@@ -23,10 +23,12 @@ class EventController extends Controller
         ], 200);
     }
 
-    // Get a single event
+    // Get a single event with category and number of bookings 
     public function show($id)
     {
-        $event = Event::with('category')->findOrFail($id);
+        $event = Event::with('category')
+            ->withCount('bookings')
+            ->findOrFail($id);
         return response()->json($event, 200);
     }
 

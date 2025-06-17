@@ -50,7 +50,7 @@ class BookingController extends Controller
         return response()->json(['message' => 'Booking created successfully', 'booking' => $booking], 201);
     }
 
-    // Function to get all bookings for a user
+    // Function to get all bookings for a user with category image
     public function getUserBookings()
     {
         // Check if the user is authenticated
@@ -59,7 +59,9 @@ class BookingController extends Controller
         }
 
         // Fetch the bookings for the authenticated user
-        $bookings = Booking::where('user_id', auth()->id())->with('event')->paginate(10);
+        $bookings = Booking::where('user_id', auth()->id())
+            ->with(['event.category'])
+            ->paginate(10);
 
         return response()->json([
             'bookings' => $bookings->items(),

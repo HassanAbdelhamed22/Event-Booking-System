@@ -48,6 +48,7 @@ export interface Event {
   start_time: string;
   end_time: string;
   organizer: string;
+  bookings_count: number;
   category: {
     id: string;
     name: string;
